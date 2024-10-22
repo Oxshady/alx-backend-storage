@@ -1,3 +1,4 @@
+#!/usr/bin/env python3
 from pymongo.collection import Collection
 from pymongo.cursor import Cursor
 from typing import Union, List, Dict
