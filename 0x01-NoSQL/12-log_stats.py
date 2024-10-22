@@ -11,7 +11,7 @@ for method in methods:
     numOfLogs = logs_collection.count_documents({"method": method})
     print(f"\tmethod {method}: {numOfLogs}")
 statusMehtod = logs_collection.count_documents(
-    {"method": "GET", "path": "status"}
+    {"method": "GET", "path": "/status"}
     )
 print(
     f"{statusMehtod} status check"
