@@ -3,6 +3,7 @@ from pymongo import MongoClient
 """script that provides some stats about Nginx logs stored in MongoDB"""
 
 if __name__ == "__main__":
+    """main script"""
     client = MongoClient('mongodb://127.0.0.1:27017')
     logs_collection = client.logs.nginx
     methods = ["GET", "POST", "PUT", "PATCH", "DELETE"]
