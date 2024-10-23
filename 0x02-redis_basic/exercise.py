@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
-"""Initialize the Cache instance with a Redis client and flush the database."""
+"""Initialize the Cache instance with a Redis
+client and flush the database."""
 from redis import Redis
 from uuid import uuid4
 from typing import Union
@@ -7,6 +8,7 @@ from typing import Union
 
 class Cache:
     """Cache class"""
+
     def __init__(self) -> None:
         """Initialize the Cache instance with a
         Redis client and flush the database"""
