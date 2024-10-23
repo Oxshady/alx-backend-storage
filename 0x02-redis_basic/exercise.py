@@ -4,8 +4,8 @@ a Redis client and flush the database."""
 
 
 from redis import Redis
-from uuid import uuid4
 from typing import Union
+from uuid import uuid4
 
 
 class Cache:
