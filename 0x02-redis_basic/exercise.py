@@ -1,27 +1,34 @@
 #!/usr/bin/env python3
-"""Initialize the Cache instance with
-a Redis client and flush the database."""
+"""
+Initialize the Cache instance with
+a Redis client and flush the database.
+"""
 
 
-from redis import Redis
+import redis
+import uuid
 from typing import Union
-from uuid import uuid4
 
 
 class Cache:
-    """Cache class"""
-
+    """
+    methods to handle redis cache operations
+    """
     def __init__(self) -> None:
-        """Initialize the Cache instance with a
-        Redis client and flush the database"""
-
-        self._redis = Redis(host="127.0.0.1", port=6379)
+        """
+        Initialize redis client
+        """
+        self._redis = redis.Redis()
         self._redis.flushdb()
 
     def store(self, data: Union[str, bytes, int, float]) -> str:
-        """generate key then store data
-        using that key and return the key"""
-
-        key = str(uuid4())
+        """
+        Store data in redis cache
+        Args:
+            data (dict): data to store
+        Returns:
+            str: key
+        """
+        key = str(uuid.uuid4())
         self._redis.set(key, data)
         return key
