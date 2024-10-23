@@ -15,7 +15,7 @@ class Cache:
         """Initialize the Cache instance with a
         Redis client and flush the database"""
 
-        self._redis = Redis()
+        self._redis = Redis(host="127.0.0.1", port=6379)
         self._redis.flushdb()
 
     def store(self, data: Union[str, bytes, int, float]) -> str:
