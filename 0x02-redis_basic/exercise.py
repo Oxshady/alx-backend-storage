@@ -22,6 +22,6 @@ class Cache:
 
         """generate key then store data
         using that key and return the key"""
-        uuid = uuid4().hex
+        uuid = str(uuid4())
         self._redis.set(name=uuid, value=data)
         return uuid
