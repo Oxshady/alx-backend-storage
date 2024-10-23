@@ -1,6 +1,8 @@
 #!/usr/bin/env python3
 """Initialize the Cache instance with a Redis
 client and flush the database."""
+
+
 from redis import Redis
 from uuid import uuid4
 from typing import Union
