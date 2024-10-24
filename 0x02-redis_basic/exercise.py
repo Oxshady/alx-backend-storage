@@ -8,8 +8,8 @@ The Redis database is flushed upon initialization of the Cache instance.
 
 import redis
 import uuid
-from typing import Union, Callable, Optional, Any
 from functools import wraps
+from typing import Union, Callable, Optional, Any
 
 
 def count_calls(fn: Callable) -> Callable:
