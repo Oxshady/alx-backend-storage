@@ -54,3 +54,33 @@ collection = db['mycollection']
 
 # Inserting a document
 collection.insert_one({"name": "John", "age": 30})
+
+## Redis
+
+Redis is an open-source, in-memory data structure store that can be used as a database, cache, and message broker. It supports various data structures, such as strings, hashes, lists, sets, and sorted sets, making it versatile for different use cases.
+
+### Key Features of Redis
+
+- **In-memory storage**: Redis stores data in memory, providing high-speed access and low-latency performance.
+- **Persistence**: It offers various persistence options, including snapshots and append-only files (AOF), ensuring data durability.
+- **Pub/Sub messaging**: Redis supports publish/subscribe messaging, enabling real-time communication between applications.
+- **Atomic operations**: Redis provides atomic operations for its data structures, allowing for reliable updates.
+
+### Using Redis in Python
+
+To use Redis in Python, you typically use the `redis-py` library. Below is a simple example of how to connect to a Redis instance and perform basic operations:
+
+```python
+import redis
+
+# Connect to Redis
+r = redis.Redis(host='localhost', port=6379, db=0)
+
+# Set a key-value pair
+r.set('foo', 'bar')
+
+# Get the value by key
+value = r.get('foo')
+
+# Print the value
+print(value.decode('utf-8'))  # Output: bar
