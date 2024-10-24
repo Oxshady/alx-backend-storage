@@ -27,7 +27,10 @@ def count_calls(fn: Callable) -> Callable:
     @wraps(fn)
     def wrapper(self, *args, **kwargs):
         key = fn.__qualname__
-        self._redis.incr(key)
+        try:
+            self._redis.incr(key)
+        except Exception as e:
+            pass
         return fn(self, *args, **kwargs)
 
     return wrapper
