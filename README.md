@@ -40,20 +40,6 @@ Indexing is a technique used to speed up the retrieval of rows from a database t
 
 MongoDB is a NoSQL database that stores data in flexible, JSON-like documents. It allows for dynamic schemas, making it ideal for handling unstructured data. MongoDB is designed to scale horizontally and is known for its high performance and availability.
 
-### MongoDB in Python
-
-To interact with MongoDB in Python, you can use the `pymongo` library. It provides an easy way to connect to a MongoDB server, perform CRUD operations, and manage data.
-
-```python
-# Example of connecting to MongoDB
-from pymongo import MongoClient
-
-client = MongoClient('mongodb://localhost:27017/')
-db = client['mydatabase']
-collection = db['mycollection']
-
-# Inserting a document
-collection.insert_one({"name": "John", "age": 30})
 
 ## Redis
 
@@ -84,3 +70,19 @@ value = r.get('foo')
 
 # Print the value
 print(value.decode('utf-8'))  # Output: bar
+```
+
+### MongoDB in Python
+
+To interact with MongoDB in Python, you can use the `pymongo` library. It provides an easy way to connect to a MongoDB server, perform CRUD operations, and manage data.
+
+```python
+# Example of connecting to MongoDB
+from pymongo import MongoClient
+
+client = MongoClient('mongodb://localhost:27017/')
+db = client['mydatabase']
+collection = db['mycollection']
+
+# Inserting a document
+collection.insert_one({"name": "John", "age": 30})
