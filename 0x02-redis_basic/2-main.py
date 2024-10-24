@@ -1,4 +1,3 @@
-from exercise import Cache
 cache = Cache()
 
 TEST_CASES = {
