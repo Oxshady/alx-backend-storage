@@ -25,13 +25,13 @@ def count_calls(method: Callable) -> Callable:
     """
 
     @wraps(method)
-    def invoker(self, *args, **kwargs) -> Any:
+    def wrapper(self, *args, **kwargs) -> Any:
         """Invokes the given method after incrementing its call counter."""
         if isinstance(self._redis, redis.Redis):
             self._redis.incr(method.__qualname__)
         return method(self, *args, **kwargs)
 
-    return invoker
+    return wrapper
 
 
 class Cache:
