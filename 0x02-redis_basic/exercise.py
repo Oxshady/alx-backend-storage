@@ -59,21 +59,19 @@ class Cache:
     def __init__(self) -> None:
         """
         Initializes the Redis client and flushes the database.
-        This ensures that the Redis cache is
-        empty when the Cache instance is created.
+        This ensures that the Redis
+        cache is empty when the Cache instance is created.
         """
         self._redis = redis.Redis()
         self._redis.flushdb()
-
-    @count_calls  # Apply the count_calls decorator to store
+    @count_calls
     def store(self, data: Union[str, bytes, int, float]) -> str:
         """
         Stores the provided data in the Redis cache.
 
         Args:
             data (Union[str, bytes, int, float]):
-                The data to store in Redis.
-                Can be a string, bytes, int, or float.
+            The data to store in Redis. Can be a string, bytes, int, or float.
 
         Returns:
             str: A unique key generated for the stored data.
@@ -84,21 +82,18 @@ class Cache:
 
     def get(self, key: str, fn: Optional[Callable] = None) -> Any:
         """
-        Retrieves data from the Redis
-        cache using the provided key.
+        Retrieves data from the Redis cache using the provided key.
         Optionally applies a conversion function.
 
         Args:
             key (str): The Redis key for the data.
-            fn (Optional[Callable]):
-                A function to apply to the retrieved
-                data for conversion (e.g., decode, int).
-                Defaults to None.
+            fn (Callable, optional):
+            A function to apply
+            to the retrieved data for conversion. Defaults to None.
 
         Returns:
-            Any: The retrieved data, optionally
-            converted by the provided function,
-                or None if the key doesn't exist.
+            Union[str, bytes, int, float, None]:
+            The retrieved data, optionally converted by the provided function.
         """
         data = self._redis.get(key)
         if data is None:
@@ -115,7 +110,8 @@ class Cache:
             key (str): The Redis key for the data.
 
         Returns:
-            Optional[str]: The retrieved data decoded as a string,
+            Optional[str]:
+            The retrieved data decoded as a string,
             or None if the key doesn't exist.
         """
         return self.get(key=key, fn=lambda d: d.decode("utf-8"))
@@ -128,7 +124,8 @@ class Cache:
             key (str): The Redis key for the data.
 
         Returns:
-            Optional[int]: The retrieved data converted to an integer,
+            Optional[int]:
+            The retrieved data converted to an integer,
             or None if the key doesn't exist.
         """
         return self.get(key=key, fn=int)
