@@ -14,7 +14,7 @@ This repository contains implementations related to backend storage technologies
 - [NoSQL with MongoDB](#nosql-with-mongodb)
   - [MongoDB Overview](#mongodb-overview)
   - [MongoDB in Python](#mongodb-in-python)
-- [Redis and Redis in Python](#redis-and-redis-in-python)
+- [Redis and Redis in Python](#Redis)
 
 ## Advanced SQL Features
 
