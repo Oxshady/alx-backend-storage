@@ -52,6 +52,6 @@ class Cache:
         Returns:
             str: A unique key generated for the stored data.
         """
-        key = str(uuid.uuid4())  # Generate a unique key
-        self._redis.set(key, data)  # Store the data in Redis
+        key = str(uuid.uuid4())
+        self._redis.set(key, data)
         return key
