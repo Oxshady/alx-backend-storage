@@ -1,27 +1,57 @@
 #!/usr/bin/env python3
-"""Initialize the Cache instance with a Redis
-client and flush the database."""
+"""
+This module provides a Cache class that
+interacts with a Redis database.
+It allows storing data in Redis, and
+retrieving it with optional type conversions.
+The Redis database is flushed upon initialization of the Cache instance.
+"""
 
-
-from redis import Redis
-from uuid import uuid4
-from typing import Union
+import redis
+import uuid
+from typing import Union, Callable, Optional
 
 
 class Cache:
-    """Cache class"""
+    """
+    A class to handle basic operations with a Redis cache.
+
+    Methods:
+        store(data: Union[str, bytes, int, float]) -> str:
+            Stores data in the Redis cache and returns a unique key.
+
+        get(key: str, fn: Optional[Callable] = None) ->
+        Union[str, bytes, int, float, None]:
+            Retrieves data from the Redis cache using the provided key.
+            Optionally applies a conversion function to the data.
+
+        get_str(key: str) -> Optional[str]:
+            Retrieves the data as a UTF-8 decoded string.
+
+        get_int(key: str) -> Optional[int]:
+            Retrieves the data as an integer.
+    """
 
     def __init__(self) -> None:
-        """Initialize the Cache instance with a
-        Redis client and flush the database"""
-
-        self._redis: Redis = Redis()
-        self._redis.flushdb(asynchronous=True)
+        """
+        Initializes the Redis client and flushes the database.
+        This ensures that the Redis cache is empty when
+        the Cache instance is created.
+        """
+        self._redis = redis.Redis()
+        self._redis.flushdb()
 
     def store(self, data: Union[str, bytes, int, float]) -> str:
-        """generate key then store data using
-        that key and return the key"""
-        
-        uuid: str = str(uuid4())
-        self._redis.set(name=uuid, value=data)
-        return uuid
+        """
+        Stores the provided data in the Redis cache.
+
+        Args:
+            data (Union[str, bytes, int, float]):
+            The data to store in Redis. Can be a string, bytes, int, or float.
+
+        Returns:
+            str: A unique key generated for the stored data.
+        """
+        key = str(uuid.uuid4())  # Generate a unique key
+        self._redis.set(key, data)  # Store the data in Redis
+        return key
