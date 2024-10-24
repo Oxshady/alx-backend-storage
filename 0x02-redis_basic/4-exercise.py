@@ -12,18 +12,22 @@ from typing import Any, Callable, Union
 
 
 def count_calls(method: Callable) -> Callable:
-    """Tracks the number of calls made to a method in a Cache class.
-    Increments a Redis key that corresponds to the method's qualified name.
+    """Tracks the number of calls
+    made to a method in a Cache class.
+    Increments a Redis key that
+    corresponds to the method's qualified name.
 
     Args:
         method (Callable): The method to be decorated.
 
     Returns:
-        Callable: The wrapped method that increments the call count.
+        Callable: The wrapped method
+        that increments the call count.
     """
     @wraps(method)
     def wrapper(self, *args, **kwargs) -> Any:
-        """Invokes the given method after incrementing its call counter."""
+        """Invokes the given method after
+        incrementing its call counter."""
         if isinstance(self._redis, redis.Redis):
             self._redis.incr(method.__qualname__)
         return method(self, *args, **kwargs)
@@ -32,39 +36,45 @@ def count_calls(method: Callable) -> Callable:
 
 
 def call_history(method: Callable) -> Callable:
-    """Tracks the call history of a method in a Cache class.
+    """Tracks the call history
+    of a method in a Cache class.
     Stores the inputs and outputs of the method calls.
 
     Args:
         method (Callable): The method to be decorated.
 
     Returns:
-        Callable: The wrapped method that tracks input and output history.
+        Callable: The wrapped
+        method that tracks input and output history.
     """
     @wraps(method)
     def wrapper(self, *args, **kwargs) -> Any:
-        in_key = f'{method.__qualname__}:inputs'
-        out_key = f'{method.__qualname__}:outputs'
+        key_input = f'{method.__qualname__}:inputs'
+        key_output = f'{method.__qualname__}:outputs'
         if isinstance(self._redis, redis.Redis):
-            self._redis.rpush(in_key, str(args))
+            self._redis.rpush(key_input, str(args))
         data = method(self, *args, **kwargs)
         if isinstance(self._redis, redis.Redis):
-            self._redis.rpush(out_key, data)
+            self._redis.rpush(key_output, data)
         return data
     return wrapper
 
 
 class Cache:
-    """Represents an object for storing data in a Redis data storage.
+    """Represents an object
+    for storing data in a Redis data storage.
 
     Methods:
         store(data: Union[str, bytes, int, float]) -> str:
-            Stores data in the Redis cache and returns a unique key.
+            Stores data in the Redis
+            cache and returns a unique key.
 
         get(key: str, fn: Optional[Callable] = None) ->
         Union[str, bytes, int, float, None]:
-            Retrieves data from the Redis cache using the provided key.
-            Optionally applies a conversion function to the data.
+            Retrieves data from the Redis
+            cache using the provided key.
+            Optionally applies a conversion
+            function to the data.
 
         get_str(key: str) -> Optional[str]:
             Retrieves the data as a UTF-8 decoded string.
@@ -82,8 +92,10 @@ class Cache:
         self._redis.flushdb(True)
 
     @count_calls
+    @call_history
     def store(self, data: Union[str, bytes, int, float]) -> str:
-        """Stores a value in a Redis data storage and returns the key.
+        """Stores a value in a Redis data
+        storage and returns the key.
 
         Args:
             data (Union[str, bytes, int, float]):
@@ -91,7 +103,8 @@ class Cache:
                 Can be a string, bytes, int, or float.
 
         Returns:
-            str: A unique key generated for the stored data.
+            str: A unique key generated
+            for the stored data.
         """
         data_key = str(uuid.uuid4())
         self._redis.set(data_key, data)
@@ -112,7 +125,8 @@ class Cache:
         Returns:
             Union[str, bytes, int, float]:
             The retrieved data, optionally converted
-            by the provided function, or None if the key doesn't exist.
+            by the provided function,
+            or None if the key doesn't exist.
         """
         data = self._redis.get(key)
         return fn(data) if fn is not None else data

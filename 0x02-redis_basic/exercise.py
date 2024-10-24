@@ -49,13 +49,13 @@ def call_history(method: Callable) -> Callable:
     """
     @wraps(method)
     def wrapper(self, *args, **kwargs) -> Any:
-        in_key = f'{method.__qualname__}:inputs'
-        out_key = f'{method.__qualname__}:outputs'
+        key_input = f'{method.__qualname__}:inputs'
+        key_output = f'{method.__qualname__}:outputs'
         if isinstance(self._redis, redis.Redis):
-            self._redis.rpush(in_key, str(args))
+            self._redis.rpush(key_input, str(args))
         data = method(self, *args, **kwargs)
         if isinstance(self._redis, redis.Redis):
-            self._redis.rpush(out_key, data)
+            self._redis.rpush(key_output, data)
         return data
     return wrapper
 
@@ -92,6 +92,7 @@ class Cache:
         self._redis.flushdb(True)
 
     @count_calls
+    @call_history
     def store(self, data: Union[str, bytes, int, float]) -> str:
         """Stores a value in a Redis data
         storage and returns the key.
