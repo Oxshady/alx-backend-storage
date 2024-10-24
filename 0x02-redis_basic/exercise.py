@@ -24,6 +24,7 @@ def count_calls(method: Callable) -> Callable:
         Callable: The wrapped method
         that increments the call count.
     """
+
     @wraps(method)
     def wrapper(self, *args, **kwargs) -> Any:
         """Invokes the given method after
@@ -47,17 +48,44 @@ def call_history(method: Callable) -> Callable:
         Callable: The wrapped
         method that tracks input and output history.
     """
+
     @wraps(method)
     def wrapper(self, *args, **kwargs) -> Any:
-        key_input = f'{method.__qualname__}:inputs'
-        key_output = f'{method.__qualname__}:outputs'
+        key_input = f"{method.__qualname__}:inputs"
+        key_output = f"{method.__qualname__}:outputs"
         if isinstance(self._redis, redis.Redis):
             self._redis.rpush(key_input, str(args))
         data = method(self, *args, **kwargs)
         if isinstance(self._redis, redis.Redis):
             self._redis.rpush(key_output, data)
         return data
+
     return wrapper
+
+
+def relpay(fn: Callable) -> None:
+    """Displays the call history of a Cache class method"""
+    if fn is None or not hasattr(fn, "__self__"):
+        return
+
+    redius = getattr(fn.__self__, "_redis", None)
+    if not isinstance(redius, redis.Redis):
+        return
+
+    method_name = fn.__qualname__
+    in_key = f"{method_name}:inputs"
+    out_key = f"{method_name}:outputs"
+    num_of_calls = int(redius.get(method_name) or 0)
+
+    print(f"{method_name} was called {num_of_calls} times:")
+
+    inputs = redius.lrange(in_key, 0, -1)
+    outputs = redius.lrange(out_key, 0, -1)
+
+    for ins, outs in zip(inputs, outputs):
+        print(
+            f'{method_name}(*{ins.decode("utf-8")}) -> {outs.decode("utf-8")}'
+            )
 
 
 class Cache:
